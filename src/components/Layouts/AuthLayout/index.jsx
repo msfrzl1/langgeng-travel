@@ -4,7 +4,11 @@ import Gap from "../../Elements/Gap";
 export default function AuthLayout({ title, type, children }) {
   return (
     <div className="min-h-screen flex justify-center items-center font-poppins">
-      <div className="w-full max-w-md p-8 shadow-lg rounded-lg">
+      <div
+        className={`w-full ${
+          type === "login" ? "max-w-md" : "max-w-xl"
+        } px-4 py-8 m-5 shadow-lg rounded-lg`}
+      >
         <h1 className="text-3xl font-bold text-center text-gray-800">
           {title}
         </h1>
