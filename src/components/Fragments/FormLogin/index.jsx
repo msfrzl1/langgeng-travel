@@ -8,6 +8,7 @@ export default function FormLogin() {
       <FormInput
         id={"email"}
         htmlFor={"email"}
+        name={"email"}
         label={"Email"}
         type={"email"}
         placeholder={"example@gmail.com"}
@@ -16,6 +17,7 @@ export default function FormLogin() {
       <FormInput
         id={"password"}
         htmlFor={"password"}
+        name={"password"}
         label={"Password"}
         type={"password"}
         placeholder={"*******"}
