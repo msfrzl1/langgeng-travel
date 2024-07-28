@@ -1,7 +1,10 @@
+import FormLogin from "../../components/Fragments/FormLogin";
+import AuthLayout from "../../components/Layouts/AuthLayout";
+
 export default function LoginPage() {
   return (
-    <div>
-      <h1>Login Page</h1>
-    </div>
+    <AuthLayout title={"Form Login"} type={"login"}>
+      <FormLogin />
+    </AuthLayout>
   );
 }
