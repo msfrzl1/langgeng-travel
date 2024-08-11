@@ -1,18 +1,37 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../Elements/Button";
 import FormInput from "../../Elements/FormInput";
 import Gap from "../../Elements/Gap";
 import HidePasswordToggle from "../../Elements/HidePasswordToggle";
+import useAuth from "../../../hooks/useAuth";
 
 export default function FormLogin() {
   const [showPassword, setShowPassword] = useState(false);
+  const { auth } = useAuth();
+  const navigate = useNavigate();
 
   const handleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
   };
 
+  const handleSubmitLogin = async (e) => {
+    e.preventDefault();
+    const userData = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
+
+    const response = await auth("login", userData);
+    if (response.status === 200) {
+      setTimeout(() => {
+        navigate("/register");
+      }, 2000);
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmitLogin}>
       <FormInput
         id={"email"}
         htmlFor={"email"}
