@@ -7,7 +7,7 @@ export default function AuthLayout({ title, type, children }) {
       <div
         className={`w-full ${
           type === "login" ? "max-w-md" : "max-w-xl"
-        } px-4 py-8 m-5 shadow-lg rounded-lg`}
+        } px-4 py-8 m-0 sm:m-5 shadow-none sm:shadow-lg rounded-lg`}
       >
         <h1 className="text-3xl font-bold text-center text-gray-800">
           {title}
