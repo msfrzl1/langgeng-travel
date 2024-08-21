@@ -7,7 +7,7 @@ export default function Button({
   return (
     <button
       {...props}
-      className={`${classname} transition duration-300 rounded-lg text-white font-semibold text-sm`}
+      className={`${classname} rounded-lg text-sm font-semibold text-white transition duration-300`}
     >
       {children || value}
     </button>

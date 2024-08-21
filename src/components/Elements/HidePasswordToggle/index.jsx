@@ -10,7 +10,7 @@ export default function HidePasswordToggle({
     <button
       type={type}
       onClick={handleShowPassword}
-      className="absolute right-2 bottom-2.5 cursor-pointer"
+      className="absolute bottom-2.5 right-2 cursor-pointer"
     >
       {showPassword ? <IoMdEye size={20} /> : <IoMdEyeOff size={20} />}
     </button>

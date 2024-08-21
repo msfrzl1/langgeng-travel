@@ -17,7 +17,7 @@ const validationSchema = yup.object().shape({
     .email("Email harus sesuai")
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "Email harus sesuai"
+      "Email harus sesuai",
     ),
   password: yup
     .string()
@@ -25,7 +25,7 @@ const validationSchema = yup.object().shape({
     .min(8, "Harus berisi 8 karakter")
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      "Password harus ada huruf besar, huruf kecil, angka, dan karakter spesial"
+      "Password harus ada huruf besar, huruf kecil, angka, dan karakter spesial",
     ),
 });
 
@@ -73,7 +73,7 @@ export default function FormLogin() {
         placeholder={"example@gmail.com"}
       />
       {formik.errors.email && (
-        <p className="bg-red-100 rounded-md text-red-600 text-xs px-1 py-1 mt-1">
+        <p className="mt-1 rounded-md bg-red-100 px-1 py-1 text-xs text-red-600">
           {formik.errors.email}
         </p>
       )}
@@ -95,7 +95,7 @@ export default function FormLogin() {
         />
       </div>
       {formik.errors.password && (
-        <p className="bg-red-100 rounded-md text-red-600 text-xs px-1 py-1 mt-1">
+        <p className="mt-1 rounded-md bg-red-100 px-1 py-1 text-xs text-red-600">
           {formik.errors.password}
         </p>
       )}

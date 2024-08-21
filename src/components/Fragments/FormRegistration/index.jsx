@@ -14,7 +14,7 @@ export default function FormRegister() {
 
   return (
     <form>
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-2">
         <div className="w-full">
           <FormInput
             id={"email"}
