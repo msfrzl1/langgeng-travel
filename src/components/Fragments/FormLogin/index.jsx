@@ -1,38 +1,70 @@
 import { useState } from "react";
+import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import useAuth from "../../../hooks/useAuth";
+import * as yup from "yup";
 import Button from "../../Elements/Button";
 import FormInput from "../../Elements/FormInput";
 import Gap from "../../Elements/Gap";
 import HidePasswordToggle from "../../Elements/HidePasswordToggle";
-import useAuth from "../../../hooks/useAuth";
+
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required("Email wajib diisi")
+    .email("Email harus sesuai")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Email harus sesuai"
+    ),
+  password: yup
+    .string()
+    .required("Password wajib diisi")
+    .min(8, "Harus berisi 8 karakter")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      "Password harus ada huruf besar, huruf kecil, angka, dan karakter spesial"
+    ),
+});
 
 export default function FormLogin() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { auth } = useAuth();
   const navigate = useNavigate();
 
-  const handleShowPassword = () => {
-    setShowPassword((prevState) => !prevState);
-  };
+  const handleShowPassword = () => setShowPassword((prevState) => !prevState);
 
-  const handleSubmitLogin = async (e) => {
-    e.preventDefault();
-    const userData = {
-      email: e.target.email.value,
-      password: e.target.password.value,
-    };
-
-    const response = await auth("login", userData);
-    if (response.status === 200) {
-      setTimeout(() => {
-        navigate("/register");
-      }, 2000);
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      setIsLoading(true);
+      const response = await auth("login", values);
+      if (response.status === 200) {
+        setTimeout(() => {
+          setIsLoading(false);
+          navigate("/register");
+        }, 3000);
+        toast.success(response.data.message);
+      } else if (response.status === 404) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 3000);
+        toast.error(response.data.message);
+      }
+    },
+  });
 
   return (
-    <form onSubmit={handleSubmitLogin}>
+    <form onSubmit={formik.handleSubmit}>
       <FormInput
+        onChange={formik.handleChange}
         id={"email"}
         htmlFor={"email"}
         name={"email"}
@@ -40,15 +72,21 @@ export default function FormLogin() {
         type={"email"}
         placeholder={"example@gmail.com"}
       />
+      {formik.errors.email && (
+        <p className="bg-red-100 rounded-md text-red-600 text-xs px-1 py-1 mt-1">
+          {formik.errors.email}
+        </p>
+      )}
       <Gap y={0.8} />
       <div className="relative w-full">
         <FormInput
+          onChange={formik.handleChange}
           id={"password"}
           htmlFor={"password"}
           name={"password"}
           label={"Password"}
           type={showPassword ? "text" : "password"}
-          placeholder={"*******"}
+          placeholder={"Kata Sandi"}
         />
         <HidePasswordToggle
           type={"button"}
@@ -56,11 +94,21 @@ export default function FormLogin() {
           handleShowPassword={handleShowPassword}
         />
       </div>
+      {formik.errors.password && (
+        <p className="bg-red-100 rounded-md text-red-600 text-xs px-1 py-1 mt-1">
+          {formik.errors.password}
+        </p>
+      )}
       <Gap y={1} />
       <Button
         type={"submit"}
-        value={"Sign In"}
-        classname="w-full bg-indigo-500 py-2 hover:bg-indigo-700"
+        value={`${isLoading ? "Loading..." : "Sign In"}`}
+        disabled={isLoading}
+        classname={`w-full py-2 ${
+          isLoading
+            ? "bg-gray-500 cursor-not-allowed"
+            : "bg-indigo-500 hover:bg-indigo-700"
+        } `}
       />
     </form>
   );
