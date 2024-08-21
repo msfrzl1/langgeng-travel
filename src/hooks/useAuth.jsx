@@ -14,9 +14,9 @@ export default function useAuth() {
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.data));
-      return response;
+      return { data: response.data, status: response.status };
     } catch (error) {
-      return error;
+      return { data: error.response.data, status: error.response.status };
     }
   };
 
