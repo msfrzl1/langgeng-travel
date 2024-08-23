@@ -4,30 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../../hooks/useAuth";
-import * as yup from "yup";
 import Button from "../../Elements/Button";
 import FormInput from "../../Elements/FormInput";
 import Gap from "../../Elements/Gap";
 import HidePasswordToggle from "../../Elements/HidePasswordToggle";
-
-const validationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .required("Email wajib diisi")
-    .email("Email harus sesuai")
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "Email harus sesuai",
-    ),
-  password: yup
-    .string()
-    .required("Password wajib diisi")
-    .min(8, "Harus berisi 8 karakter")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      "Password harus ada huruf besar, huruf kecil, angka, dan karakter spesial",
-    ),
-});
+import validationSchema from "../../../schemas/validationSchema";
 
 export default function FormLogin() {
   const [showPassword, setShowPassword] = useState(false);
