@@ -67,7 +67,7 @@ export default function FormLogin() {
           name={"password"}
           label={"Password"}
           type={showPassword ? "text" : "password"}
-          placeholder={"Kata Sandi"}
+          placeholder={"Enter your password"}
         />
         <HidePasswordToggle
           type={"button"}
