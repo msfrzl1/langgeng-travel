@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { VscLoading } from "react-icons/vsc";
 import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../../hooks/useAuth";
 import Button from "../../Elements/Button";
@@ -74,14 +75,22 @@ export default function FormLogin() {
 
       <Button
         type={"submit"}
-        value={`${isLoading ? "Loading..." : "Sign In"}`}
         disabled={isLoading}
         classname={`w-full py-2 ${
           isLoading
             ? "bg-gray-500 cursor-not-allowed"
             : "bg-indigo-500 hover:bg-indigo-700"
         } `}
-      />
+      >
+        {isLoading ? (
+          <div className="flex items-center justify-center gap-2">
+            <VscLoading size={20} className="animate-spin" />
+            Processing...
+          </div>
+        ) : (
+          "Sign In"
+        )}
+      </Button>
     </form>
   );
 }
