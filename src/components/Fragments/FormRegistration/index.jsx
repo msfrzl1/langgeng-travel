@@ -5,7 +5,7 @@ import FormInput from "../../Elements/FormInput";
 import Gap from "../../Elements/Gap";
 import SelecOption from "../../Elements/SelectOption";
 import HidePasswordToggle from "../../Elements/HidePasswordToggle";
-import axios from "axios";
+import useUpload from "../../../hooks/useUpload";
 
 export default function FormRegister() {
   const [error, setError] = useState("");
@@ -13,6 +13,8 @@ export default function FormRegister() {
     password: false,
     passwordRepeat: false,
   });
+  const [imageUrl, setImageUrl] = useState(false);
+  const { uploadImage } = useUpload();
 
   const toggleShowPassword = (key) => {
     setShowPasswords((prevState) => ({
@@ -34,22 +36,9 @@ export default function FormRegister() {
       setError("");
       const formData = new FormData();
       formData.append("image", filePicture);
-      try {
-        const response = await axios.post(
-          "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/upload-image",
-          formData,
-          {
-            headers: {
-              apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pZnRhaGZhcmhhbkBnbWFpbC5jb20iLCJ1c2VySWQiOiI5NWE4MDNjMy1iNTFlLTQ3YTAtOTBkYi0yYzJmM2Y0ODE1YTkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2Nzk4NDM0NDR9.ETsN6dCiC7isPReiQyHCQxya7wzj05wz5zruiFXLx0k",
-              "Content-Type": "multipart/form-data",
-            },
-          },
-        );
-        console.log(response.data.url);
-      } catch (error) {
-        console.log(error);
+      const response = await uploadImage("upload-image", formData);
+      if (response.status === 200) {
+        setImageUrl(response.data.url);
       }
     }
   };
