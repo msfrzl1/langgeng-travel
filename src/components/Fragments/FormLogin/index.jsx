@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,7 +7,6 @@ import Button from "../../Elements/Button";
 import FormInput from "../../Elements/FormInput";
 import Gap from "../../Elements/Gap";
 import HidePasswordToggle from "../../Elements/HidePasswordToggle";
-import validationSchema from "../../../schemas/validationSchema";
 
 export default function FormLogin() {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,34 +16,33 @@ export default function FormLogin() {
 
   const handleShowPassword = () => setShowPassword((prevState) => !prevState);
 
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema,
-    onSubmit: async (values) => {
-      setIsLoading(true);
-      const response = await auth("login", values);
-      if (response.status === 200) {
-        setTimeout(() => {
-          setIsLoading(false);
-          navigate("/register");
-        }, 3000);
-        toast.success(response.data.message);
-      } else if (response.status === 404) {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 3000);
-        toast.error(response.data.message);
-      }
-    },
-  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const userData = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
+
+    const response = await auth("login", userData);
+    if (response.status === 200) {
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate("/register");
+      }, 3000);
+      toast.success(response.data.message);
+    } else if (response.status === 404) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+      toast.error(response.data.message);
+    }
+  };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <FormInput
-        onChange={formik.handleChange}
         id={"email"}
         htmlFor={"email"}
         name={"email"}
@@ -53,15 +50,11 @@ export default function FormLogin() {
         type={"email"}
         placeholder={"example@gmail.com"}
       />
-      {formik.errors.email && (
-        <p className="mt-1 rounded-md bg-red-100 px-1 py-1 text-xs text-red-600">
-          {formik.errors.email}
-        </p>
-      )}
+
       <Gap y={0.8} />
+
       <div className="relative w-full">
         <FormInput
-          onChange={formik.handleChange}
           id={"password"}
           htmlFor={"password"}
           name={"password"}
@@ -69,18 +62,16 @@ export default function FormLogin() {
           type={showPassword ? "text" : "password"}
           placeholder={"Enter your password"}
         />
+
         <HidePasswordToggle
           type={"button"}
           showPassword={showPassword}
           handleShowPassword={handleShowPassword}
         />
       </div>
-      {formik.errors.password && (
-        <p className="mt-1 rounded-md bg-red-100 px-1 py-1 text-xs text-red-600">
-          {formik.errors.password}
-        </p>
-      )}
+
       <Gap y={1} />
+
       <Button
         type={"submit"}
         value={`${isLoading ? "Loading..." : "Sign In"}`}
