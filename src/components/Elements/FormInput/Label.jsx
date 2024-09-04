@@ -3,7 +3,7 @@ export default function Label({ htmlFor, id, label }) {
     <label
       htmlFor={htmlFor}
       id={id}
-      className="block text-sm font-medium text-gray-700"
+      className="block px-1 text-sm font-medium text-gray-700"
     >
       {label}
     </label>
