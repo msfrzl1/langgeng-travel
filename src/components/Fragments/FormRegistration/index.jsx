@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { VscLoading } from "react-icons/vsc";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "../../Elements/Button";
 import FormInput from "../../Elements/FormInput";
@@ -72,12 +73,13 @@ export default function FormRegister() {
           setIsLoading(false);
           navigate("/login");
         }, 3000);
+        toast.success(response.data.message);
       } else if (response.status === 409) {
         setTimeout(() => {
           setIsLoading(false);
         }, 3000);
+        toast.error(response.data.message);
       }
-      console.log(response);
     },
   });
 
